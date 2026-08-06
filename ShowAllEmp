@@ -1,0 +1,87 @@
+import React, { useEffect, useState } from 'react'
+import { deleteEmp, showAllEmp } from '../apiService';
+
+const ShowAllEmp = ({added , sendUpdate}) => {
+
+    let [allemployees, setAllemployees] = useState([])
+
+    useEffect(() => {
+        loadAllEmployees();
+    },[added])
+
+    const loadAllEmployees = () => {
+
+        showAllEmp().then((res) => setAllemployees(res.data))
+
+    }
+
+    const handleDelete = (empid) => {
+
+        console.log(empid)
+        deleteEmp(empid).then((res) => {
+            loadAllEmployees();
+        })
+    }
+
+    const handleUpdate = (emp) => {
+
+        sendUpdate(emp);
+
+    }
+
+  return (
+    <div className="employee-table-container">
+    <h1 className="section-title">All Employees</h1>
+
+    <table className="employee-table">
+
+
+            
+           
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>DEPT</th>
+                        <th>EMAIL</th>
+                        <th>SALARY</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {
+                        allemployees.map((emp) => (
+                            <tr key={emp.id}>
+                                <td>{emp.id}</td>
+                                <td>{emp.name}</td>
+                                <td>{emp.department}</td>
+                                <td>{emp.email}</td>
+                                <td>{emp.salary}</td>
+                                <td>
+                                   <button
+  className="delete-btn"
+  onClick={() => handleDelete(emp.id)}
+>
+  Delete
+</button> {" "}
+                                  <button
+  className="update-btn"
+  onClick={() => handleUpdate(emp)}
+>
+  Update
+</button>
+                                </td>
+                            </tr>
+                        )
+
+                        )
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    )
+}
+
+export default ShowAllEmp
