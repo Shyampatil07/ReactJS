@@ -1,0 +1,56 @@
+import React, { useEffect, useState } from 'react'
+import { deleteData, showdata } from './apiServvices'
+
+const ProductTable = ({ ref, setEdit}) => {
+    let [pro, setPro] = useState([])
+
+    useEffect(() => {
+        loadData()
+    }, [ref])
+    let loadData = async () => {
+        let { data } = await showdata()
+        setPro(data)
+    }
+    let handelDelete = async (id) => {
+        await deleteData(id);
+        loadData();
+
+    }
+    let handelupdate = (p) => {
+        setEdit(p);
+    }
+    return (
+        <div>
+            <table border='2'>
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>price</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        pro.map((p) => (
+                            <tr key={p.id}>
+                                <td>{p.name}</td>
+                                <td>{p.price}</td>
+                                <td>
+                                    <button onClick={() => handelDelete(p.id)}>delete</button>
+                                    <button onClick={() => handelupdate(p)}>Update</button>
+                                </td>
+
+                            </tr>
+                        ))
+
+                    }
+                </tbody>
+
+            </table>
+
+        </div>
+    )
+}
+
+export default ProductTable
