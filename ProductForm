@@ -1,0 +1,41 @@
+import React, { useEffect, useState } from 'react'
+import { addData, updateData } from './apiServvices';
+
+const ProductForm = ({ refreshTable, edit }) => {
+    let [form, setForm] = useState({ name: '', price: '' });
+    useEffect(() => {
+        if (edit) {
+            setForm(edit);
+        }
+    }, [edit])
+    let handelSubmit = async (e) => {
+        e.preventDefault();
+        if (edit) {
+            await updateData(edit.id, form)
+        } else {
+            await addData(form)
+        }
+        refreshTable();
+        setForm({ name: '', price: '' })
+
+
+    }
+    let handelChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value })
+
+    }
+    return (
+        <div>
+            <form onSubmit={handelSubmit}>
+                name:  <input type="text" name='name' value={form.name} onChange={handelChange} />
+                price:  <input type="text" name='price' value={form.price} onChange={handelChange} />
+                <button type="submit">add data</button>
+
+
+            </form>
+
+        </div>
+    )
+}
+
+export default ProductForm
