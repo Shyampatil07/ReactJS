@@ -1,0 +1,47 @@
+package com.example.demo;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+
+
+
+@Service
+public class SBServices {
+	
+	@Autowired
+	SBRepo sb;
+
+	public String insert(SBEntity e) {
+		sb.save(e);
+		return "data is inserted";
+	}
+	
+	public String delete(int id) {
+		sb.deleteById(id);
+		return "delete the record";
+	}
+	
+	public String update( SBEntity e, int id) {
+		SBEntity sb1=sb.findById(id).orElseThrow(() -> new RuntimeException("Record not found"));
+		sb1.setDepartment(e.getDepartment());
+		sb1.setEmail(e.getEmail());
+		sb1.setName(e.getName());
+		sb1.setPhoneNumber(e.getPhoneNumber());
+		sb1.setSalary(e.getSalary());
+		sb.save(sb1);
+		return "record update ";
+	}
+	
+	public List<SBEntity> fecth(){
+		return sb.findAll();
+	}
+	
+	public Optional<SBEntity> singleFetch(int id){
+		return sb.findById(id);
+	}
+	
+}
